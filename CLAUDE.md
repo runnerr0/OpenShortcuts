@@ -41,40 +41,6 @@ iOS Shortcut → POST /briefing or /topic → Python HTTP server → LLM (Groq/O
 | GET | /feed | RSS feed of past briefings (HTTP Basic Auth) |
 | GET | /health | Health check for load balancer |
 
-## PAI Integration
-
-This project uses PAI (Personal AI Infrastructure) v4.0.3 capabilities.
-The full system is installed at `~/.claude/PAI/`.
-
-### The Algorithm
-
-For complex, multi-step work, load and follow `~/.claude/PAI/Algorithm/v3.7.0.md`.
-This is the 7-phase problem-solving loop:
-**OBSERVE → THINK → PLAN → BUILD → EXECUTE → VERIFY → LEARN**
-
-### Context Routing
-
-When you need PAI system context, read `~/.claude/PAI/CONTEXT_ROUTING.md` for file paths.
-
-### Thinking Tools
-
-Invoke via the Skill tool when the situation calls for it:
-
-| Skill | When to Use |
-|-------|-------------|
-| **Council** | Multiple valid approaches worth debating |
-| **RedTeam** | Stress-test a proposal, find fatal flaws |
-| **FirstPrinciples** | Challenge unexamined assumptions |
-| **BeCreative** | Divergent thinking, brainstorming |
-| **Science** | Hypothesis testing, structured experiments |
-| **Research** | Deep investigation with parallel agents |
-
-### Agents
-
-14 specialized agents available at `~/.claude/agents/`:
-Architect, Engineer, Designer, QATester, UIReviewer, Pentester,
-ClaudeResearcher, PerplexityResearcher, GeminiResearcher, and more.
-
 ## Running Locally
 
 ```bash
