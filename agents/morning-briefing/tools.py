@@ -7,10 +7,18 @@ The TOOL_SCHEMAS list defines the tools in OpenAI function-calling format,
 which is also compatible with Bedrock action groups and LangGraph.
 """
 
+import html as html_module
 import json
+import re
+import urllib.parse
 import urllib.request
 import urllib.error
 from datetime import datetime, timedelta
+
+
+def _html_unescape(text):
+    """Unescape HTML entities like &#x27; &amp; etc."""
+    return html_module.unescape(text)
 
 
 # --- Tool Schemas (OpenAI function-calling format) ---
@@ -112,6 +120,27 @@ TOOL_SCHEMAS = [
                 "type": "object",
                 "properties": {},
                 "required": [],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "web_search",
+            "description": "Search the web for information on any topic. Returns titles, snippets, and URLs from search results.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "The search query",
+                    },
+                    "count": {
+                        "type": "integer",
+                        "description": "Number of results to return (default 5, max 10)",
+                    },
+                },
+                "required": ["query"],
             },
         },
     },
@@ -269,6 +298,74 @@ def get_time_context():
     }
 
 
+def web_search(query, count=5):
+    """Search the web using DuckDuckGo Lite (free, no API key).
+
+    Parses the Lite HTML results page for titles, snippets, and URLs.
+    """
+    count = min(count or 5, 10)
+    try:
+        encoded_query = urllib.parse.quote_plus(query)
+        url = f"https://lite.duckduckgo.com/lite/?q={encoded_query}"
+        req = urllib.request.Request(url, headers={
+            "User-Agent": "Mozilla/5.0 (compatible; OpenShortcuts/1.0)",
+        })
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            html = resp.read().decode("utf-8", errors="replace")
+
+        results = []
+
+        # DuckDuckGo Lite: <a href="..." class='result-link'>Title</a>
+        link_pattern = re.compile(
+            r"""<a[^>]*href=["']([^"']+)["'][^>]*class='result-link'>(.*?)</a>""",
+            re.DOTALL,
+        )
+        snippet_pattern = re.compile(
+            r"class='result-snippet'>(.*?)</td>",
+            re.DOTALL,
+        )
+
+        links = link_pattern.findall(html)
+        snippets = snippet_pattern.findall(html)
+
+        for i, (link_url, raw_title) in enumerate(links[:count]):
+            title = _html_unescape(re.sub(r"<[^>]+>", "", raw_title).strip())
+            snippet = ""
+            if i < len(snippets):
+                snippet = _html_unescape(re.sub(r"<[^>]+>", "", snippets[i]).strip())
+            # Clean redirect URLs to extract actual destination
+            clean_url = link_url
+            uddg = re.search(r"uddg=([^&]+)", link_url)
+            if uddg:
+                clean_url = urllib.parse.unquote(uddg.group(1))
+            if title:
+                results.append({"title": title, "snippet": snippet, "url": clean_url})
+
+        # Also grab the zero-click abstract if present
+        zc_match = re.search(
+            r"Zero-click info:.*?<a[^>]*href=\"([^\"]+)\"[^>]*>(.*?)</a>",
+            html, re.DOTALL,
+        )
+        zc_abstract = re.search(
+            r"Zero-click info:.*?</tr>\s*<tr>\s*<td>(.*?)</td>",
+            html, re.DOTALL,
+        )
+        zero_click = None
+        if zc_match:
+            zero_click = {
+                "title": re.sub(r"<[^>]+>", "", zc_match.group(2)).strip(),
+                "url": zc_match.group(1),
+                "abstract": re.sub(r"<[^>]+>", "", zc_abstract.group(1)).strip() if zc_abstract else "",
+            }
+
+        result = {"query": query, "results": results, "count": len(results)}
+        if zero_click:
+            result["zero_click"] = zero_click
+        return result
+    except Exception as e:
+        return {"error": str(e), "query": query, "results": []}
+
+
 # --- Tool dispatcher ---
 
 TOOL_FUNCTIONS = {
@@ -277,6 +374,7 @@ TOOL_FUNCTIONS = {
     "get_calendar_events": get_calendar_events,
     "get_commute_time": get_commute_time,
     "get_time_context": get_time_context,
+    "web_search": web_search,
 }
 
 

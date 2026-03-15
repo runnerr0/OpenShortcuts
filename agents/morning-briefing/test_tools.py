@@ -107,11 +107,12 @@ def test_execute_tool_dispatch():
 def test_tool_schemas():
     print("\n--- TOOL_SCHEMAS ---")
     test("schemas is a list", isinstance(TOOL_SCHEMAS, list))
-    test("has 5 tools", len(TOOL_SCHEMAS) == 5)
+    test("has 6 tools", len(TOOL_SCHEMAS) == 6)
     names = {t["function"]["name"] for t in TOOL_SCHEMAS}
     test("has get_weather", "get_weather" in names)
     test("has get_news", "get_news" in names)
     test("has get_time_context", "get_time_context" in names)
+    test("has web_search", "web_search" in names)
     for schema in TOOL_SCHEMAS:
         func = schema["function"]
         test(f"  {func['name']} has description", bool(func.get("description")))
