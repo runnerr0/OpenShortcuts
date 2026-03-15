@@ -21,11 +21,13 @@ Apple Shortcuts treated like real software artifacts: documented, versioned, cat
 |----------|-------------|---------|
 | [Universal Transcribe](shortcuts/speech/universal-transcribe/) | Record audio, send to any STT service, get text on clipboard | [Install](shortcuts://import-shortcut?url=https%3A%2F%2Fraw.githubusercontent.com%2Frunnerr0%2FOpenShortcuts%2Fmain%2Fshortcuts%2Fspeech%2Funiversal-transcribe%2Funiversal-transcribe.shortcut&name=Universal%20Transcribe) |
 
-### AI
+### AI / Agents
 
 | Shortcut | Description | Install |
 |----------|-------------|---------|
 | [Clipboard Rewriter](shortcuts/ai/clipboard-rewriter/) | Transform clipboard text via LLM: rewrite, simplify, grammar, translate | [Install](shortcuts://import-shortcut?url=https%3A%2F%2Fraw.githubusercontent.com%2Frunnerr0%2FOpenShortcuts%2Fmain%2Fshortcuts%2Fai%2Fclipboard-rewriter%2Fclipboard-rewriter.shortcut&name=Clipboard%20Rewriter) |
+| [Morning Briefing](agents/morning-briefing/) | Tap to get a personalized briefing (weather, calendar, news, commute) via an AI agent | — |
+| [Audio Briefing](agents/audio-briefing/) | *Future* — Generate podcast episodes on any topic, delivered to your podcast app | — |
 
 ### Productivity
 
@@ -38,6 +40,7 @@ Apple Shortcuts treated like real software artifacts: documented, versioned, cat
 ### Developer
 
 *Coming soon*
+
 
 ## Getting Started
 
@@ -77,6 +80,10 @@ OpenShortcuts/
 └── assets/
     └── screenshots/
 ```
+
+## Roadmap
+
+See [docs/ROADMAP.md](docs/ROADMAP.md) for what's shipping in the MVP vs future ideas.
 
 ## Contributing
 
