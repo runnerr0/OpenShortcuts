@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenShortcuts — Curated iOS Shortcuts</title>
+    <meta name="description" content="A curated library of reusable iOS Shortcuts for AI, speech-to-text, productivity, and developer workflows. One-tap install.">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --border: #30363d;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --accent: #58a6ff;
+            --accent-hover: #79c0ff;
+            --green: #3fb950;
+            --purple: #bc8cff;
+            --orange: #d29922;
+            --red: #f85149;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2.5rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .badge-row {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        .category {
+            margin-bottom: 2.5rem;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .category-icon {
+            font-size: 1.5rem;
+        }
+
+        .category-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .shortcut-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .shortcut-card:hover {
+            border-color: var(--accent);
+        }
+
+        .shortcut-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .shortcut-header h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .shortcut-header h3 a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .shortcut-header h3 a:hover {
+            color: var(--accent-hover);
+            text-decoration: underline;
+        }
+
+        .shortcut-description {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .shortcut-tags {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .tag-stt { background: rgba(59, 185, 80, 0.15); color: var(--green); }
+        .tag-llm { background: rgba(188, 140, 255, 0.15); color: var(--purple); }
+        .tag-native { background: rgba(210, 153, 34, 0.15); color: var(--orange); }
+        .tag-share { background: rgba(88, 166, 255, 0.15); color: var(--accent); }
+
+        .shortcut-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-install {
+            background: var(--accent);
+            color: #0d1117;
+        }
+
+        .btn-install:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-docs {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+
+        .btn-docs:hover {
+            color: var(--text);
+            border-color: var(--text-muted);
+        }
+
+        .btn-download {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+
+        .btn-download:hover {
+            color: var(--text);
+            border-color: var(--text-muted);
+        }
+
+        .how-it-works {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .how-it-works h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: rgba(88, 166, 255, 0.15);
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .step h3 {
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .step p {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .notice {
+            background: rgba(210, 153, 34, 0.1);
+            border: 1px solid rgba(210, 153, 34, 0.3);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 2rem;
+            font-size: 0.85rem;
+            color: var(--orange);
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.8rem; }
+            .container { padding: 1rem; }
+            .shortcut-header { flex-direction: column; }
+            .steps { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>OpenShortcuts</h1>
+            <p>Curated iOS Shortcuts that connect your iPhone to AI, speech-to-text, and productivity APIs.</p>
+            <div class="badge-row">
+                <span class="badge">Open Source</span>
+                <span class="badge">Provider Agnostic</span>
+                <span class="badge">Privacy Focused</span>
+            </div>
+        </header>
+
+        <div class="how-it-works">
+            <h2>How to Install</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Tap Install</h3>
+                    <p>Opens the Shortcuts app on your iPhone or iPad</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Review &amp; Add</h3>
+                    <p>iOS shows you what the shortcut does before adding</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Configure</h3>
+                    <p>Enter your API key and endpoint when prompted</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Use It</h3>
+                    <p>Tap from Home Screen, widget, Share Sheet, or Siri</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="notice">
+            Requires iOS 16+ and "Allow Untrusted Shortcuts" enabled in Settings &gt; Shortcuts. You'll also need an API key from your chosen provider (OpenAI, Groq, Anthropic, etc.).
+        </div>
+
+        <!-- Speech -->
+        <div class="category">
+            <div class="category-header">
+                <span class="category-icon">🎙️</span>
+                <h2>Speech</h2>
+            </div>
+
+            <div class="shortcut-card" id="universal-transcribe">
+                <div class="shortcut-header">
+                    <h3><a href="https://github.com/runnerr0/OpenShortcuts/tree/main/shortcuts/speech/universal-transcribe">Universal Transcribe</a></h3>
+                </div>
+                <p class="shortcut-description">
+                    Record audio on your device, send it to any transcription service, get text copied to your clipboard. Works with OpenAI Whisper, Groq, Deepgram, or a local server.
+                </p>
+                <div class="shortcut-tags">
+                    <span class="tag tag-stt">Speech-to-Text</span>
+                    <span class="tag tag-native">Clipboard</span>
+                </div>
+                <div class="shortcut-actions">
+                    <a class="btn btn-install" href="shortcuts://import-shortcut?url=https%3A%2F%2Fraw.githubusercontent.com%2Frunnerr0%2FOpenShortcuts%2Fmain%2Fshortcuts%2Fspeech%2Funiversal-transcribe%2Funiversal-transcribe.shortcut&name=Universal%20Transcribe">
+                        ↓ Install Shortcut
+                    </a>
+                    <a class="btn btn-docs" href="https://github.com/runnerr0/OpenShortcuts/tree/main/shortcuts/speech/universal-transcribe">
+                        Docs
+                    </a>
+                    <a class="btn btn-download" href="https://raw.githubusercontent.com/runnerr0/OpenShortcuts/main/shortcuts/speech/universal-transcribe/universal-transcribe.shortcut" download>
+                        Download .shortcut
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI -->
+        <div class="category">
+            <div class="category-header">
+                <span class="category-icon">🤖</span>
+                <h2>AI</h2>
+            </div>
+
+            <div class="shortcut-card" id="clipboard-rewriter">
+                <div class="shortcut-header">
+                    <h3><a href="https://github.com/runnerr0/OpenShortcuts/tree/main/shortcuts/ai/clipboard-rewriter">Clipboard Rewriter</a></h3>
+                </div>
+                <p class="shortcut-description">
+                    Copy any text, tap the shortcut, pick a mode — rewrite professionally, simplify, fix grammar, make concise, or translate — and the transformed text replaces your clipboard.
+                </p>
+                <div class="shortcut-tags">
+                    <span class="tag tag-llm">LLM</span>
+                    <span class="tag tag-native">Clipboard</span>
+                </div>
+                <div class="shortcut-actions">
+                    <a class="btn btn-install" href="shortcuts://import-shortcut?url=https%3A%2F%2Fraw.githubusercontent.com%2Frunnerr0%2FOpenShortcuts%2Fmain%2Fshortcuts%2Fai%2Fclipboard-rewriter%2Fclipboard-rewriter.shortcut&name=Clipboard%20Rewriter">
+                        ↓ Install Shortcut
+                    </a>
+                    <a class="btn btn-docs" href="https://github.com/runnerr0/OpenShortcuts/tree/main/shortcuts/ai/clipboard-rewriter">
+                        Docs
+                    </a>
+                    <a class="btn btn-download" href="https://raw.githubusercontent.com/runnerr0/OpenShortcuts/main/shortcuts/ai/clipboard-rewriter/clipboard-rewriter.shortcut" download>
+                        Download .shortcut
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Productivity -->
+        <div class="category">
+            <div class="category-header">
+                <span class="category-icon">⚡</span>
+                <h2>Productivity</h2>
+            </div>
+
+            <div class="shortcut-card" id="voice-structured-notes">
+                <div class="shortcut-header">
+                    <h3><a href="https://github.com/runnerr0/OpenShortcuts/tree/main/shortcuts/productivity/voice-structured-notes">Voice to Structured Notes</a></h3>
+                </div>
+                <p class="shortcut-description">
+                    Record speech, transcribe it, then have an LLM structure it into a formatted note with title, summary, key points, and action items. Saved directly to Apple Notes.
+                </p>
+                <div class="shortcut-tags">
+                    <span class="tag tag-stt">Speech-to-Text</span>
+                    <span class="tag tag-llm">LLM</span>
+                    <span class="tag tag-native">Apple Notes</span>
+                </div>
+                <div class="shortcut-actions">
+                    <a class="btn btn-install" href="shortcuts://import-shortcut?url=https%3A%2F%2Fraw.githubusercontent.com%2Frunnerr0%2FOpenShortcuts%2Fmain%2Fshortcuts%2Fproductivity%2Fvoice-structured-notes%2Fvoice-structured-notes.shortcut&name=Voice%20Structured%20Notes">
+                        ↓ Install Shortcut
+                    </a>
+                    <a class="btn btn-docs" href="https://github.com/runnerr0/OpenShortcuts/tree/main/shortcuts/productivity/voice-structured-notes">
+                        Docs
+                    </a>
+                    <a class="btn btn-download" href="https://raw.githubusercontent.com/runnerr0/OpenShortcuts/main/shortcuts/productivity/voice-structured-notes/voice-structured-notes.shortcut" download>
+                        Download .shortcut
+                    </a>
+                </div>
+            </div>
+
+            <div class="shortcut-card" id="research-capture">
+                <div class="shortcut-header">
+                    <h3><a href="https://github.com/runnerr0/OpenShortcuts/tree/main/shortcuts/productivity/research-capture">Quick Research Capture</a></h3>
+                </div>
+                <p class="shortcut-description">
+                    Share a URL from Safari, an LLM summarizes the article with key takeaways, and the result is appended to a running Research Log note in Apple Notes.
+                </p>
+                <div class="shortcut-tags">
+                    <span class="tag tag-llm">LLM</span>
+                    <span class="tag tag-share">Share Sheet</span>
+                    <span class="tag tag-native">Apple Notes</span>
+                </div>
+                <div class="shortcut-actions">
+                    <a class="btn btn-install" href="shortcuts://import-shortcut?url=https%3A%2F%2Fraw.githubusercontent.com%2Frunnerr0%2FOpenShortcuts%2Fmain%2Fshortcuts%2Fproductivity%2Fresearch-capture%2Fresearch-capture.shortcut&name=Quick%20Research%20Capture">
+                        ↓ Install Shortcut
+                    </a>
+                    <a class="btn btn-docs" href="https://github.com/runnerr0/OpenShortcuts/tree/main/shortcuts/productivity/research-capture">
+                        Docs
+                    </a>
+                    <a class="btn btn-download" href="https://raw.githubusercontent.com/runnerr0/OpenShortcuts/main/shortcuts/productivity/research-capture/research-capture.shortcut" download>
+                        Download .shortcut
+                    </a>
+                </div>
+            </div>
+
+            <div class="shortcut-card" id="voice-reminders">
+                <div class="shortcut-header">
+                    <h3><a href="https://github.com/runnerr0/OpenShortcuts/tree/main/shortcuts/productivity/voice-reminders">Voice to Reminders</a></h3>
+                </div>
+                <p class="shortcut-description">
+                    Speak naturally — "Call the dentist tomorrow at 2pm and pick up groceries Saturday" — and an LLM parses your speech into individual reminders with dates, times, and priorities.
+                </p>
+                <div class="shortcut-tags">
+                    <span class="tag tag-stt">Speech-to-Text</span>
+                    <span class="tag tag-llm">LLM</span>
+                    <span class="tag tag-native">Reminders</span>
+                </div>
+                <div class="shortcut-actions">
+                    <a class="btn btn-install" href="shortcuts://import-shortcut?url=https%3A%2F%2Fraw.githubusercontent.com%2Frunnerr0%2FOpenShortcuts%2Fmain%2Fshortcuts%2Fproductivity%2Fvoice-reminders%2Fvoice-reminders.shortcut&name=Voice%20Reminders">
+                        ↓ Install Shortcut
+                    </a>
+                    <a class="btn btn-docs" href="https://github.com/runnerr0/OpenShortcuts/tree/main/shortcuts/productivity/voice-reminders">
+                        Docs
+                    </a>
+                    <a class="btn btn-download" href="https://raw.githubusercontent.com/runnerr0/OpenShortcuts/main/shortcuts/productivity/voice-reminders/voice-reminders.shortcut" download>
+                        Download .shortcut
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>
+                <a href="https://github.com/runnerr0/OpenShortcuts">GitHub</a> ·
+                <a href="https://github.com/runnerr0/OpenShortcuts/blob/main/CONTRIBUTING.md">Contribute</a> ·
+                <a href="https://github.com/runnerr0/OpenShortcuts/blob/main/LICENSE">MIT License</a>
+            </p>
+            <p style="margin-top: 0.5rem;">
+                OpenShortcuts is open source. Shortcuts are provider-agnostic — bring your own API key.
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
