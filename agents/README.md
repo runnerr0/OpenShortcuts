@@ -139,6 +139,13 @@ Python Agent (LangGraph or plain tool loop)
 
 See: `agents/morning-briefing/ecs-container/`
 
+## Agents
+
+| Agent | Status | Description |
+|-------|--------|-------------|
+| [Morning Briefing](morning-briefing/) | MVP | Text-based personalized briefing |
+| [Audio Briefing](audio-briefing/) | Future | Podcast-style audio delivered to your feed |
+
 ## Morning Briefing Agent
 
 The first agent we're building. Tap a shortcut, get a personalized morning
