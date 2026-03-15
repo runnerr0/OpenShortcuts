@@ -14,7 +14,15 @@
 .env
 .env.local
 
+# Python
+__pycache__/
+*.pyc
+
 # Build artifacts
 node_modules/
 dist/
 build/
+
+# Claude Code
+.claude/
+setup-wizard.zip
