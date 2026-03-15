@@ -21,3 +21,4 @@ build/
 
 # Claude Code
 .claude/
+setup-wizard.zip
