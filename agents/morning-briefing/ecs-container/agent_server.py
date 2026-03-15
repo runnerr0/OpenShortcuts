@@ -20,10 +20,23 @@ import os
 import sys
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
-# Add parent for shared tools/prompts (in container, these are copied to /app)
+# Add paths for shared tools/prompts — works both in container (same dir)
+# and when running directly from the repo (parent dir)
 sys.path.insert(0, os.path.dirname(__file__))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from tools import TOOL_SCHEMAS, execute_tool
 from prompts import SYSTEM_PROMPT, build_user_prompt
+
+
+def _clean_message(message):
+    """Convert an OpenAI message to a dict, stripping unsupported fields.
+
+    Some providers (Groq) reject extra fields like 'annotations' that the
+    OpenAI SDK adds via model_dump(). Strip them for compatibility.
+    """
+    d = message.model_dump()
+    d.pop("annotations", None)
+    return {k: v for k, v in d.items() if v is not None}
 
 
 def run_agent_openai(latitude=None, longitude=None, preferences=None):
@@ -59,16 +72,14 @@ def run_agent_openai(latitude=None, longitude=None, preferences=None):
 
         choice = response.choices[0]
         message = choice.message
-        messages.append(message.model_dump())
+        messages.append(_clean_message(message))
 
         if not message.tool_calls:
             return message.content
 
         for tool_call in message.tool_calls:
-            result = execute_tool(
-                tool_call.function.name,
-                json.loads(tool_call.function.arguments),
-            )
+            args = json.loads(tool_call.function.arguments) if tool_call.function.arguments else {}
+            result = execute_tool(tool_call.function.name, args)
             messages.append({
                 "role": "tool",
                 "tool_call_id": tool_call.id,

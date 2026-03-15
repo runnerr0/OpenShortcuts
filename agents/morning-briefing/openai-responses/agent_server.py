@@ -63,8 +63,10 @@ def run_agent(latitude=None, longitude=None, preferences=None):
         choice = response.choices[0]
         message = choice.message
 
-        # Append assistant's response to conversation
-        messages.append(message.model_dump())
+        # Strip unsupported fields (e.g. 'annotations') for provider compat
+        msg_dict = message.model_dump()
+        msg_dict.pop("annotations", None)
+        messages.append({k: v for k, v in msg_dict.items() if v is not None})
 
         # If no tool calls, we're done
         if not message.tool_calls:
@@ -73,7 +75,7 @@ def run_agent(latitude=None, longitude=None, preferences=None):
         # Execute each tool call
         for tool_call in message.tool_calls:
             func_name = tool_call.function.name
-            func_args = json.loads(tool_call.function.arguments)
+            func_args = json.loads(tool_call.function.arguments) if tool_call.function.arguments else {}
 
             result = execute_tool(func_name, func_args)
 

@@ -284,6 +284,8 @@ def execute_tool(name, arguments):
     """Execute a tool by name with the given arguments dict."""
     if name not in TOOL_FUNCTIONS:
         return {"error": f"Unknown tool: {name}"}
+    if not arguments:
+        arguments = {}
     try:
         return TOOL_FUNCTIONS[name](**arguments)
     except Exception as e:
