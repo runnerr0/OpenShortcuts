@@ -1,0 +1,7 @@
+# Pick one LLM provider (or multiple):
+openai>=1.0
+# anthropic>=0.30
+# langchain-ollama>=0.1
+
+# For the agent server
+# No additional deps needed — uses stdlib http.server
