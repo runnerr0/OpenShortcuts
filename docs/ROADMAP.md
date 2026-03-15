@@ -21,14 +21,48 @@ documented well enough that someone can clone the repo and get running.
 | Agent architecture (4 hosting strategies) | Done |
 | Morning Briefing agent (Bedrock, OpenAI, LangGraph, ECS) | Done |
 | Shared tools (weather, news, calendar, commute) | Done |
-| Setup wizard | Done |
+| Setup wizard (CLI) | Done |
+| Test suite (tools + HTTP server) | Done |
 
 ### Still Needed for MVP
 
 - [ ] End-to-end setup guide: clone → configure → install shortcut → working demo
 - [ ] At least one agent strategy fully tested with real API keys
-- [ ] Setup wizard generates working shortcut files
+- [ ] Setup wizard → **web UI** (local Python server, no CLI)
 - [ ] Basic validation script for shortcut files
+
+### Setup Wizard — Web UI
+
+Replace the CLI wizard with a local web server (`python3 setup.py` → opens browser):
+
+```
+┌─────────────────────────────────────────────────┐
+│  OpenShortcuts Setup                            │
+│                                                 │
+│  1. Pick Shortcuts     [✓] Morning Briefing     │
+│                        [✓] Universal Transcribe │
+│                        [ ] Audio Briefing       │
+│                                                 │
+│  2. Hosting Strategy   ○ Local (Ollama)         │
+│                        ● Cloud (OpenAI)         │
+│                        ○ AWS (Bedrock)          │
+│                        ○ ECS Container          │
+│                                                 │
+│  3. API Keys           OpenAI: sk-...           │
+│                        Weather: (free, no key)  │
+│                        News: (free, HN fallback)│
+│                                                 │
+│  4. Generate           [Generate Shortcuts]     │
+│                                                 │
+│     ┌──────────┐  Scan to install on iPhone     │
+│     │ QR Code  │                                │
+│     │          │  Or tap: Install Shortcut       │
+│     └──────────┘                                │
+└─────────────────────────────────────────────────┘
+```
+
+Single Python file, inline HTML/CSS/JS, zero npm. Serves on localhost,
+generates .shortcut files, shows QR codes. Opens browser automatically.
 
 ---
 
