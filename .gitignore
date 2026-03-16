@@ -23,6 +23,9 @@ node_modules/
 dist/
 build/
 
+# Audio briefing outputs
+agents/audio-briefing/episodes/
+
 # Claude Code
 .claude/
 setup-wizard.zip
